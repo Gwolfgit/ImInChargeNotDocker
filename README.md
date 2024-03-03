@@ -6,7 +6,14 @@ To address this and ensure that custom iptables rules always take precedence, I 
 
 This version of Docker is maintained in my private OneDev repository and will be mirrored here, tailored for environments where precise control over network policies is paramount.
 
-
+Usage:
+git clone
+cd MutinyOnTheDocker
+make
+mv /usr/bin/dockerd /usr/bin/xdocker (backup)
+cp bundles/binary/dockerd /usr/bin/dockerd
+iptables -F && iptables -X && iptables -t nat -F && ./yourfirewallscript.sh && systemctl restart docker
+confirm behavior with: iptables -L -nv && iptables -t nat -L -nv
 
 
 The Moby Project
