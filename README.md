@@ -6,6 +6,8 @@ To address this and ensure that custom iptables rules always take precedence, I 
 
 This version of Docker is maintained in my private OneDev repository and will be mirrored here, tailored for environments where precise control over network policies is paramount.
 
+TODO: Adjust the ordering of Docker iptables rules for improved network control, as rule precedence is crucial. Adding a specific numerical value after -I should suffice for precise positioning. So far, this setup hasn't caused any problems. Ultimately, the specifics of Docker's rule manipulation are secondary, provided my primary ingress filtering rules take precedence. While integrating them into DOCKER-USER is an option, I prefer direct oversight for assurance.
+
 Usage:
 ```
 git clone
@@ -54,8 +56,7 @@ Chain FORWARD (policy ACCEPT 1 packets, 176 bytes)
     0     0 DOCKER-USER  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
 ```
 
-TODO: Change Docker iptables rule ordering for due dilligence since rule ordering is important. Should be as easy as adding a numerical value after -I.
-Although I haven't noticed any issues with this configuation. I don't really care what docker does as long as my ingress filtering rules are applied.
+
 
 ------
 
