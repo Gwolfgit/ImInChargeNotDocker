@@ -4,7 +4,7 @@ Docker is an indispensable tool for container orchestration, but its default beh
 
 To address this and ensure that custom iptables rules always take precedence, I have modified Docker's libnetwork source code. Specifically, I've replaced all instances of `iptables -I` with `iptables -A` within the source. This alteration changes Docker's approach from inserting rules at the beginning of iptables chains to appending them at the end. This ensures that Docker's rules do not override the administrator's configurations, providing a more respectful coexistence with the host system's network stack.
 
-This version of Docker is maintained in my private OneDev repository, tailored for environments where precise control over network policies is paramount. It's a testament to Docker's versatility and the open-source community's ability to adapt tools to their specific needs.
+This version of Docker is maintained in my private OneDev repository and will be mirrored here, tailored for environments where precise control over network policies is paramount. It's a testament to Docker's versatility and the open-source community's ability to adapt tools to their specific needs.
 
 
 
