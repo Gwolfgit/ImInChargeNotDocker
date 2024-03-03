@@ -36,6 +36,7 @@ Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
     0     0 ACCEPT     all  --  docker0 docker0  0.0.0.0/0            0.0.0.0/0                    
     0     0 DROP       all  --  docker_gwbridge docker_gwbridge  0.0.0.0/0            0.0.0.0/0           
     0     0 PORT_FWD   all  --  ens3   *       0.0.0.0/0            0.0.0.0/0            /* I_D_TS */
+    0     0 FWD_FILTER all  --  ens3   *       0.0.0.0/0            0.0.0.0/0            /* I_D_TS */
 ```
 
 ## After
@@ -43,6 +44,7 @@ Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
 Chain FORWARD (policy ACCEPT 1 packets, 176 bytes)
  pkts bytes target     prot opt in     out     source               destination         
  7117 1093K PORT_FWD   all  --  ens3   *       0.0.0.0/0            0.0.0.0/0            /* I_D_TS */
+ 2341 193K  FWD_FILTER all  --  ens3   *       0.0.0.0/0            0.0.0.0/0            /* I_D_TS */
  4576  671K ACCEPT     all  --  virbr0 ens3    0.0.0.0/0            0.0.0.0/0            /* I_D_TS */
  7117 1093K ACCEPT     all  --  ens3   virbr0  0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED /* I_D_TS */
   148 21238 ACCEPT     all  --  virbr0 virbr0  0.0.0.0/0            0.0.0.0/0            /* I_D_TS */
@@ -53,7 +55,9 @@ Chain FORWARD (policy ACCEPT 1 packets, 176 bytes)
 ```
 
 TODO: Change Docker iptables rule ordering for due dilligence since rule ordering is important. Should be as easy as adding a numerical value after -I.
-Although I haven't noticed any issues with this configuation (yet).
+Although I haven't noticed any issues with this configuation. I don't really care what docker does as long as my ingress filtering rules are applied.
+
+------
 
 
 
