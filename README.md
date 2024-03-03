@@ -17,6 +17,44 @@ iptables -F && iptables -X && iptables -t nat -F && ./yourfirewallscript.sh && s
 confirm behavior with: iptables -L -nv && iptables -t nat -L -nv
 ```
 
+## Before
+```
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 DOCKER-USER  all  --  *      *       0.0.0.0/0            0.0.0.0/0            
+    0     0 DOCKER-ISOLATION-STAGE-1  all  --  *      *       0.0.0.0/0            0.0.0.0/0            
+    0     0 ACCEPT     all  --  *      docker_gwbridge  0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 DOCKER     all  --  *      docker_gwbridge  0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     all  --  docker_gwbridge !docker_gwbridge  0.0.0.0/0            0.0.0.0/0           
+  822 70029 ACCEPT     all  --  *      br-16b2a696f08f  0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    5   300 DOCKER     all  --  *      br-16b2a696f08f  0.0.0.0/0            0.0.0.0/0           
+  833  709K ACCEPT     all  --  br-16b2a696f08f !br-16b2a696f08f  0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     all  --  br-16b2a696f08f br-16b2a696f08f  0.0.0.0/0            0.0.0.0/0           
+61323  135M ACCEPT     all  --  *      docker0  0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 DOCKER     all  --  *      docker0  0.0.0.0/0            0.0.0.0/0           
+49401 2978K ACCEPT     all  --  docker0 !docker0  0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     all  --  docker0 docker0  0.0.0.0/0            0.0.0.0/0                    
+    0     0 DROP       all  --  docker_gwbridge docker_gwbridge  0.0.0.0/0            0.0.0.0/0           
+    0     0 PORT_FWD   all  --  ens3   *       0.0.0.0/0            0.0.0.0/0            /* I_D_TS */
+```
+
+## After
+```
+Chain FORWARD (policy ACCEPT 1 packets, 176 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+ 7117 1093K PORT_FWD   all  --  ens3   *       0.0.0.0/0            0.0.0.0/0            /* I_D_TS */
+ 4576  671K ACCEPT     all  --  virbr0 ens3    0.0.0.0/0            0.0.0.0/0            /* I_D_TS */
+ 7117 1093K ACCEPT     all  --  ens3   virbr0  0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED /* I_D_TS */
+  148 21238 ACCEPT     all  --  virbr0 virbr0  0.0.0.0/0            0.0.0.0/0            /* I_D_TS */
+    0     0 log_kvm_DEBUG  all  --  *      virbr0  0.0.0.0/0            0.0.0.0/0            /* I_D_TS */
+    0     0 log_kvm_DEBUG  all  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            /* I_D_TS */
+    0     0 DOCKER-ISOLATION-STAGE-1  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 DOCKER-USER  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+```
+
+
+
+
 The Moby Project
 ================
 
