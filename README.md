@@ -52,6 +52,8 @@ Chain FORWARD (policy ACCEPT 1 packets, 176 bytes)
     0     0 DOCKER-USER  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
 ```
 
+TODO: Change Docker iptables rule ordering for due dilligence since rule ordering is important. Should be as easy as adding a numerical value after -I.
+Although I haven't noticed any issues with this configuation (yet).
 
 
 
