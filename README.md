@@ -1,3 +1,14 @@
+## Custom Docker iptables Handling
+
+Docker is an indispensable tool for container orchestration, but its default behavior can be overly invasive, especially regarding how it interacts with the host system's iptables. By default, Docker assumes priority over the host's network stack, adding numerous iptables rules and using `iptables -I` (insert) to enforce this. This behavior can disrupt carefully configured network policies by placing Docker's rules at the top of iptables chains, potentially overriding existing rules set by the system administrator.
+
+To address this and ensure that custom iptables rules always take precedence, I have modified Docker's libnetwork source code. Specifically, I've replaced all instances of `iptables -I` with `iptables -A` within the source. This alteration changes Docker's approach from inserting rules at the beginning of iptables chains to appending them at the end. This ensures that Docker's rules do not override the administrator's configurations, providing a more respectful coexistence with the host system's network stack.
+
+This version of Docker is maintained in my private OneDev repository, tailored for environments where precise control over network policies is paramount. It's a testament to Docker's versatility and the open-source community's ability to adapt tools to their specific needs.
+
+
+
+
 The Moby Project
 ================
 
