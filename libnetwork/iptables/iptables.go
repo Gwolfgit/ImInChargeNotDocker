@@ -27,7 +27,7 @@ const (
 	// Delete deletes the rule from the chain.
 	Delete Action = "-D"
 	// Insert inserts the rule at the top of the chain.
-	Insert Action = "-I"
+	Insert Action = "-A"
 )
 
 // Policy is the default iptable policies
@@ -330,14 +330,14 @@ func (c *ChainInfo) Forward(action Action, ip net.IP, port int, proto, destAddr 
 	}
 
 	if !c.HairpinMode {
-		args = append(args, "!", "-i", bridgeName)
+		args = append(args, "!", "-A", bridgeName)
 	}
 	if err := iptable.ProgramRule(Nat, c.Name, action, args); err != nil {
 		return err
 	}
 
 	args = []string{
-		"!", "-i", bridgeName,
+		"!", "-A", bridgeName,
 		"-o", bridgeName,
 		"-p", proto,
 		"-d", destAddr,
@@ -388,7 +388,7 @@ func (c *ChainInfo) Link(action Action, ip1, ip2 net.IP, port int, proto string,
 	iptable := GetIptable(c.IPVersion)
 	// forward
 	args := []string{
-		"-i", bridgeName, "-o", bridgeName,
+		"-A", bridgeName, "-o", bridgeName,
 		"-p", proto,
 		"-s", ip1.String(),
 		"-d", ip2.String(),
@@ -614,7 +614,7 @@ func (iptable IPTable) EnsureJumpRule(fromChain, toChain string) error {
 			return fmt.Errorf("unable to remove jump to %s rule in %s chain: %v", toChain, fromChain, err)
 		}
 	}
-	if err := iptable.RawCombinedOutput("-I", fromChain, "-j", toChain); err != nil {
+	if err := iptable.RawCombinedOutput("-A", fromChain, "-j", toChain); err != nil {
 		return fmt.Errorf("unable to insert jump to %s rule in %s chain: %v", toChain, fromChain, err)
 	}
 	return nil
